@@ -144,7 +144,7 @@
   </div>
 <?php
  
-$conn = new mysqli("localhost", "root", "","foodpop");
+$conn = new mysqli("localhost", "root", "root","foodpop");
 // Check connection
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
@@ -152,7 +152,7 @@ $conn = new mysqli("localhost", "root", "","foodpop");
 $sql = "SELECT * FROM recipes where status='ua'";
 
 $result = $conn->query($sql);
-$c=1;
+
  if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
@@ -184,7 +184,7 @@ $c=1;
 		echo "</p>";
 		echo "<input type='hidden' name='app1' value='".$row['recipename']."'></input>";
 		echo "<input type='submit' value='Approve' name='approve' class='btn btn-primary'></input>";
-		echo "<input type='submit' value='Remove' name='remove' class='btn btn-primary' style='margin-left:20px'></input>";
+		echo "<input type='submit' value='Mark As Spam' name='spam' class='btn btn-primary' style='margin-left:20px'></input>";
 		echo "<hr>";
 		echo "</div>";
 		echo "</div>";
@@ -205,11 +205,11 @@ if(isset($_POST["approve"]))
 header("Location:admin.php");} else {
     echo  "Error".$conn->error; 
 	}}
-if(isset($_POST["remove"])) 
+if(isset($_POST["spam"])) 
 	{
-		$sql2 = "DELETE FROM recipes WHERE recipename='".$_POST['app1']."'";
+		$sql2 = "UPDATE recipes SET status='spam' WHERE recipename='".$_POST['app1']."'";
 					if ($conn->query($sql2) === TRUE) {
-     $message = "Recipe removed successfully.";
+     $message = "Recipe marked as spam.";
 echo "<script type='text/javascript'>alert('$message');</script>";
 		header("Location:admin.php");} else {
     echo  "Error".$conn->error; 
