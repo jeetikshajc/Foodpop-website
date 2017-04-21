@@ -150,7 +150,7 @@
     </div>
   </div>
 </nav>
-hello this is sid
+
 <div class="jumbotron text-center">
   <h1>Welcome to FOODPOP</h1> 
   <p> Taste something new</p>
@@ -180,7 +180,7 @@ $result = $conn->query($sql1);
  if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "<form method='post' action='profile.php'>";
+        echo "<form method='post'>";
 		echo "<div  class='form-group'>";
 		echo "<h3 style='margin-left:10%; margin-right:10%;' >Name of Recipe :  ";
 		echo $row['recipename'];
@@ -200,9 +200,24 @@ $result = $conn->query($sql1);
 		echo "<p>";
 		echo $row['recipe'];
 		echo "</p>";
+		echo "<input type='hidden' name='app1' value='".$row['recipename']."'></input>";
+		echo "<textarea rows='4' style='margin-left:10%' cols='100' name='newrecipe' placeholder='Edit your recipe here'></textarea>";
+		echo "<input type='submit' value='Edit' style='margin-left:10%' name='edit' class='btn btn-primary'></input>";
 		echo "<hr>";
 		echo "</div>";
 		echo "</div>";
+		
+		if(isset($_POST["edit"])) 
+	{
+		$sql1 = "UPDATE recipes SET recipe='".($_POST['newrecipe'])."' WHERE recipename='".$_POST['app1']."'";
+			if ($conn->query($sql1) === TRUE) {
+     $message = "Recipe edited successfully.";
+ echo "<script type='text/javascript'>alert('$message');</script>";
+header("Location:profile.php");
+} 
+else {
+    echo  "Error".$conn->error; 
+	}}
 		echo "</form>";
 		
  }
